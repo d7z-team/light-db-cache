@@ -4,7 +4,6 @@ plugins {
     kotlin("jvm")
     id("org.jlleitschuh.gradle.ktlint")
     `maven-publish`
-    application
 }
 java.sourceCompatibility = JavaVersion.VERSION_11
 
@@ -16,17 +15,19 @@ java {
     modularity.inferModulePath.set(true)
 }
 
-application {
-    // 启动类配置
-    mainModule.set("gradle.kotlin.template")
-    mainClass.set("com.github.template.MainKt")
+ktlint {
+    version.set("0.45.1")
 }
 
 val junitJupiterVersion = rootProject.property("version.junit.jupiter")!!
 val junitLauncherVersion = rootProject.property("version.junit.launcher")!!
+val lightDBVersion = rootProject.property("version.light-db")!!
 dependencies {
+    implementation(platform("com.github.d7z-team.light-db:bom:$lightDBVersion"))
     implementation(kotlin("reflect"))
     implementation(kotlin("stdlib"))
+    implementation("com.github.d7z-team.light-db:db-api")
+    testImplementation("com.github.d7z-team.light-db:db-memory")
     testImplementation("org.junit.jupiter:junit-jupiter:$junitJupiterVersion")
     testImplementation("org.junit.platform:junit-platform-launcher:$junitLauncherVersion")
 }

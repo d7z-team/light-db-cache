@@ -1,3 +1,3 @@
-rootProject.name = "KotlinProjectTemplate"
+rootProject.name = "light-db-cache"
 include("bom")
-include("template")
+include("cache-core")
