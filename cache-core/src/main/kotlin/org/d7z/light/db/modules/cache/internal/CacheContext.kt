@@ -27,6 +27,14 @@ class CacheContext<K : Any, V : Any>(
     }
 
     override fun execute(defaultFun: () -> V): V {
+        return executeOptional().orElseGet(defaultFun)
+    }
+
+    override fun execute(defaultReturn: V): V {
+        return execute { defaultReturn }
+    }
+
+    override fun executeOptional(): Optional<V> {
         return content.get(key).or {
             val funcResult = invoke() // 无缓存，执行业务拉取缓存
             if ((funcResult != null) && filterList.all { it(funcResult) }) { // 缓存通过过滤器
@@ -43,10 +51,6 @@ class CacheContext<K : Any, V : Any>(
                     Optional.empty() // 无缓存无默认值
                 }
             }
-        }.orElseGet(defaultFun)
-    }
-
-    override fun execute(defaultReturn: V): V {
-        return execute { defaultReturn }
+        }
     }
 }
